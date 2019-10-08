@@ -1,0 +1,16 @@
+
+def pass = 'P@ssw0rd123'
+def store = 'testCertStore.jks'
+def alias = "test-cert"
+def jarName = project.name
+def jarDir = 'C:\\Niagara\\Niagara-4.7.109.20\\modules'
+def certDir = 'C:\\Users\\Victor Smolinski\\Niagara4.7\\vykon\\certManagement'
+
+task signJar(type:Exec){
+    commandLine 'jarsigner',
+            '-keystore', certDir.concat('\\'+store),
+            '-storepass', pass,
+            jarDir.concat('\\'+jarName+'.jar'),
+            alias
+    ignoreExitValue = true
+}

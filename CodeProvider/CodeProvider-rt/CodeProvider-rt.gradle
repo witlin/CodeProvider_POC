@@ -1,0 +1,76 @@
+/* Module Build File */
+
+description     = "test case for a networked provisioning agent using an instance of classloader in a security compliant manner."
+ext {
+  pass = 'P@sssw0rd123'
+  store = 'testStore.jks'
+  jarDir = "${gradle.ext.niagara_home}/modules"
+  certDir = "${gradle.ext.niagara_user_home}/certManagement"
+  n4JreDir = '../../../../../../../../niagara/niagara-4.7.109.20/jre/bin' /*path to local n4 jre relative to the OS
+              jre dir the keyTool executables use...*/
+}
+niagaraModule {
+  moduleName = "CodeProvider"
+  preferredSymbol = "cp"
+  runtimeProfile = "rt"
+  certAlias = "test-cert"
+}
+
+dependencies {
+  compile "Tridium:nre:4.7"
+  compile "Tridium:baja:4.7"
+}
+
+jar{
+  from("src"){}
+  doLast{
+    apply from: "${rootDir}/gradle/signJar.gradle"
+    tasks.withType(Exec){ Exec task -> task.execute() }
+  }
+}
+
+moduleTestJar {
+  from('srcTest') {
+  }
+}
+
+task zip2Dist(type: Zip) {
+  baseName = "${project.name}-${project.version}"
+  destinationDir = file("${gradle.ext.dist_home}")
+  from file("${gradle.ext.rt_build_home}")
+  include { f -> f.file.name.equals(baseName+".jar") }
+  println 'task: zip2Dist'
+  println "dist name: ${project.name}-${project.version}"
+  println "dist dir: ${gradle.ext.dist_home}"
+}
+
+/*task runStation(type:Exec){
+    workingDir = n4JreDir
+    commandLine 'station', station
+    ignoreExitValue = true
+}*/
+
+/*
+task makeKeyStore(type:Exec){
+  workingDir n4JreDir
+  commandLine 'keytool',
+          '-genkey',
+          '-alias', niagaraModule.certAlias,
+          '-keyAlg', 'RSA',
+          '-ext', 'EKU=\"codeSigning\"',
+          '-validity', '600',
+          '-keypass', pass,
+          '-storepass',pass,
+          '-keystore', certDir.concat('\\'+store),
+          '-dname', 'CN=Victor Smolinski, OU=Development, O=My Company, L=Detroit, ST=Michigan, C=US'
+}
+
+task exportCert(type:Exec){
+  workingDir n4JreDir
+  commandLine 'keytool',
+          '-export',
+          '-keystore', certDir.concat('\\'+store),
+          '-alias', niagaraModule.certAlias,
+          '-file', certDir+'\\'+niagaraModule.certAlias+'.cer',
+          '-rfc'
+}*/

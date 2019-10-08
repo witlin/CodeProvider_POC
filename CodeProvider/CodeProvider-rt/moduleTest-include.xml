@@ -1,0 +1,7 @@
+<!-- Module Include File -->
+<!-- Types -->
+<types>
+  <!-- Type Example:<type name="MyClass" class="com.acme.BMyClass"/> -->
+  <!--com.resolute.CodeProvider.test-->
+  <type class="com.resolute.CodeProvider.test.BClassloadingTest" name="ClassloadingTest"/>
+</types>

@@ -1,0 +1,13 @@
+# Project exclude paths
+/.gradle/
+/build/
+/resolute/CodeProvider-rt/build/
+/resolute/CodeProvider-rt/build/classes/java/main/
+/resolute/CodeProvider-rt/build/classes/java/niagaraModuleTest/
+.idea/
+#sign*
+devOps*
+.lock
+.bin
+.properties
+cache*
